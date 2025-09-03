@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import java.io.IOException
 import java.io.OutputStream
 import java.util.*
+import kotlin.text.compareTo
 
 class MainActivity : AppCompatActivity() {
 
@@ -93,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         arrayAdapter.clear()
-        deviceList.clear() // ini deviceList milik class
+        deviceList.clear()
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter.bondedDevices
         pairedDevices?.forEach { device ->
             arrayAdapter.add("${device.name} - ${device.address}")
-            deviceList.add(device) // masukkan ke list global
+            deviceList.add(device)
         }
 
         if (deviceList.isEmpty()) {
@@ -122,7 +123,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun connectToDevice(device: BluetoothDevice) {
-        // Cek permission dulu
+
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.BLUETOOTH_CONNECT
@@ -141,7 +142,7 @@ class MainActivity : AppCompatActivity() {
                 val socket = device.createRfcommSocketToServiceRecord(uuidSPP)
                 socket.connect()
                 connectedSocket = socket
-                PrinterConnection.connectedSocket = socket // simpan global
+                PrinterConnection.connectedSocket = socket
 
                 runOnUiThread {
                     Toast.makeText(this, "Terhubung ke ${device.name}", Toast.LENGTH_SHORT).show()
@@ -178,4 +179,5 @@ class MainActivity : AppCompatActivity() {
         }
         ActivityCompat.requestPermissions(this, perms.toTypedArray(), REQUEST_BT_PERMISSIONS)
     }
+
 }
